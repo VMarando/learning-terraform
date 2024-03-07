@@ -19,6 +19,12 @@ on:
           - 'staging'
           - 'sandbox'
           - 'prod'
+env:
+  environment: ${{ github.event.inputs.environment || 'dev' }}
+  region: ${{ github.event.inputs.region || 'us-west-2' }}
+  account: ${{ secrets.account }}
+  acc_alias: ${{ secrets.account_alias }}
+  account_id: ${{ secrets.account_id }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,7 +40,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo ${{ github.event.inputs.environment }}.tfvars
+        run: echo ${{ env.account }}
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
