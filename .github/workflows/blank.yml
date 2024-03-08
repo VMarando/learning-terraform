@@ -18,8 +18,13 @@ on:
         description: Select the environment
         required: true
         options:
-          - TEST
-          - UAT
+          - dev
+          - test
+env:
+  environment: ${{ github.event.inputs.environment || 'dev' }}
+  account: ${{ secrets.account }}
+  acc_alias: ${{ secrets.account_alias }}
+  account_id: ${{ secrets.account_id }}
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -40,4 +45,4 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Add other actions to build,
-          echo test, and deploy your project.
+          echo ${{ env.account }}
