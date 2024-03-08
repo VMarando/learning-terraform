@@ -50,4 +50,5 @@ jobs:
         env:
           DEBUG_PASSWORD: ${{ secrets.account }}
         run: |
-          echo ${{secret.account}}
+          artifact_bucket="ops-${{ env.account }}"
+          echo $artifact_bucket
