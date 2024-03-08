@@ -4,6 +4,19 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment name
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - 'dev'
+          - 'test'
+env:
+  environment: ${{ github.event.inputs.environment || 'dev' }}
+  account: ${{ secrets.account }}
 
 jobs:
   print-env:
@@ -13,17 +26,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Print GitHub Environment Variables
+      - name: Configure variables
         run: |
-          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
-          echo "GITHUB_SHA: $GITHUB_SHA"
-          echo "GITHUB_EVENT_NAME: $GITHUB_EVENT_NAME"
-          echo "GITHUB_ACTOR: $GITHUB_ACTOR"
-          echo "GITHUB_REF: $GITHUB_REF"
-          echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
-          echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
-          echo "GITHUB_WORKFLOW: $GITHUB_WORKFLOW"
-          echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
-          echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
-          echo "GITHUB_ACTION: $GITHUB_ACTION"
-          echo "GITHUB_EVENT_PATH: $GITHUB_EVENT_PATH"
+           runningEnv=${{ env.environment }}
+           runningAccount=${{ env.account }}
+           echo "$runningEnv"
+           echo "$runningAccount"
+
