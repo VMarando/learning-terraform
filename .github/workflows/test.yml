@@ -1,49 +1,21 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+input:
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       environment:
-        description: Environment name
-        required: true
-        default: 'dev'
         type: choice
+        description: Select the environment
+        required: true
         options:
-          - 'dev'
-          - 'staging'
-          - 'sandbox'
-          - 'prod'
-env:
-  environment: ${{ github.event.inputs.environment || 'dev' }}
-  region: ${{ github.event.inputs.region || 'us-west-2' }}
-  account: ${{ secrets.account }}
-  acc_alias: ${{ secrets.account_alias }}
-  account_id: ${{ secrets.account_id }}
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+          - TEST
+          - UAT
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  run-portal-tests:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo ${{ env.account }}
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    environment: ${{ github.event.inputs.environment }}
+secrets:
+- name: Run tests
+    env:
+      ENDPOINT: ${{ secrets.ENDPOINT }}
+      TEST_USER: ${{ secrets.TEST_USER }}
+      TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
