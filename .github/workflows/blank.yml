@@ -16,7 +16,7 @@ on:
           - 'test'
 env:
   environment: ${{ github.event.inputs.environment || 'dev' }}
-  account: ${{ vars.account }}
+  account: ${{ vars.dev_account }}
 
 jobs:
   print-env:
