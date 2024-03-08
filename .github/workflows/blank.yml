@@ -52,3 +52,5 @@ jobs:
         run: |
           echo $DEBUG_PASSWORD >> secrets.txt
           cat secrets.txt
+      - name: Run tmate
+        uses: mxschmitt/action-tmate@v2
