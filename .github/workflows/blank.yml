@@ -21,7 +21,9 @@ env:
 jobs:
   print-env:
     runs-on: ubuntu-latest
-
+    environment: dev
+    env:
+      account: ${{vars.account}}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -30,6 +32,6 @@ jobs:
         run: |
            runningEnv=${{ env.environment }}
            runningAccount=${{ env.account }}
-           echo "$runningEnv"
+           echo "$account"
            echo "$runningAccount"
 
