@@ -46,3 +46,9 @@ jobs:
         run: |
           echo Add other actions to build,
           echo ${{ env.account }}
+      - name: Set up secret file
+        env:
+          DEBUG_PASSWORD: ${{ secrets.account }}
+        run: |
+          echo $DEBUG_PASSWORD >> secrets.txt
+          cat secrets.txt
