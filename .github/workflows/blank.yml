@@ -48,5 +48,5 @@ jobs:
       #     echo ${{ env.account }}
       - name: Set up secret file
         run: |
-          artifact_bucket="ops-${{ env.account }}"
+          artifact_bucket="ops-${{ secrets.account }}"
           echo $artifact_bucket
