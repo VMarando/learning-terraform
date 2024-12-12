@@ -64,6 +64,6 @@ resource "aws_security_group_rule" "blog_everything_out" {
   to_port     = 0
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
-  description = "outbound_rule_for_all"
+  description = "outbound_rule_for_all_port"
   security_group_id = aws_security_group.blog.id
 }
