@@ -1,7 +1,5 @@
-#output "instance_ami" {
-#  value = aws_instance.web.ami
-#}
+output "environment_url" {
+  module = module.blog_alb.lb_dns_name
+}
 
-#output "instance_arn" {
-#  value = aws_instance.web.arn
-#}
+
