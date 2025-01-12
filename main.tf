@@ -1,24 +1,21 @@
-data "aws_ami" "app_ami" {
-  most_recent = true
+provider "vault" {
+  address          = "http://4.247.162.33:8200/"
+  skip_child_token = true
 
-  filter {
-    name   = "name"
-    values = ["bitnami-tomcat-*-x86_64-hvm-ebs-nami"]
+  auth_login {
+    path = "auth/approle/login"
+
+    parameters = {
+      role_id   = ""
+      secret_id = ""
+    }
   }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["979382823631"] # Bitnami
 }
 
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.app_ami.id
-  instance_type = "t2.micro"
+# to fetch value from HashiCorp Vault
+# link to official documents https://registry.terraform.io/providers/hashicorp/vault/latest/docs/data-sources/kv_secret_v2
 
-  tags = {
-    Name = "HelloWorldNishuKumar"
-  }
+data "vault_kv_secret_v2" "example" {
+  mount = "kv"
+  name  = "test-secret"
 }
