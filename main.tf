@@ -1,33 +1,60 @@
-data "aws_ami" "app_ami" {
-  most_recent = true
+module "grb_vpc" {
+  source = "terraform-aws-modules/vpc/aws"
 
-  filter {
-    name   = "name"
-    values = ["bitnami-tomcat-*-x86_64-hvm-ebs-nami"]
-  }
+  name = "dev" 
+  cidr = "10.0.0.0/16"
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
+  azs             = ["us-west-2a", "us-west-2b", "us-west-2c"]
 
-  owners = ["979382823631"] # Bitnami
-}
-
-data "aws_vpc" "default" {
-  default = true
-}
-
-resource "aws_instance" "blog" {
-  ami                    = data.aws_ami.app_ami.id
-  instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.blog.id]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 
   tags = {
-    Name = "Learning Terraform"
+    Terraform = "true"
+    Environment = "dev"
   }
 }
 
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.11.21.0/24"
+
+  tags = {
+    Name = "tf-example"
+  }
+}
+
+resource "aws_subnet" "QA_subnet" {
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = "10.11.31.0/24"
+  availability_zone = "us-west-2a"
+
+  tags = {
+    Name = "tf-example"
+  }
+}
+
+resource "aws_subnet" "DEV_subnet" {
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = "10.11.41.0/24"
+  availability_zone = "us-west-2a"
+
+  tags = {
+    Name = "tf-example"
+  }
+}
+
+resource "aws_subnet" "PROD_subnet" {
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = "10.11.51.0/24"
+  availability_zone = "us-west-2a"
+
+  tags = {
+    Name = "tf-example"
+  }
+}
+
+### STEP - 2
+## SECURITY GROUP
+#################
 resource "aws_security_group" "blog" {
   name = "blog"
   tags = {
@@ -45,7 +72,6 @@ resource "aws_security_group_rule" "blog_http_in" {
   security_group_id = aws_security_group.blog.id
 }
 
-
 resource "aws_security_group_rule" "blog_https_in" {
   type        = "ingress"
   from_port   = 443
@@ -54,7 +80,6 @@ resource "aws_security_group_rule" "blog_https_in" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = aws_security_group.blog.id
 }
-
 
 resource "aws_security_group_rule" "blog_everything_out" {
   type        = "egress"
