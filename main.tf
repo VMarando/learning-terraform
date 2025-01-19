@@ -60,7 +60,7 @@ resource "aws_security_group" "blog" {
   tags = {
     Terraform = "true"
   }
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = data.aws_vpc.my_vpc.id
 }
 
 resource "aws_security_group_rule" "blog_http_in" {
