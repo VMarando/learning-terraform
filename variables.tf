@@ -31,11 +31,6 @@ variable "environment" {
   default = "dev"
 }
 
-variable "service_token" {
-  type      = string
-  ephemeral = true
-}
-
 locals {
   service_tag   = "${var.service_name}-${var.environment}"
   session_token = "${var.service_name}:${var.service_token}"
