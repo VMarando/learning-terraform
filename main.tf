@@ -63,6 +63,7 @@ module "blog_alb" {
       cidr_ipv4   = "10.0.0.0/16"
     }
   }
+}
 
   listeners = {
     ex-http-https-redirect = {
