@@ -14,9 +14,17 @@ data "aws_ami" "app_ami" {
   owners = ["979382823631"] # Bitnami
 }
 
-data "aws_vpc" "default" {
-  default = true
-}
+#data "aws_vpc" "default" {
+#  default = true
+#}
+
+#resource "aws_vpc" "main" {
+# cidr_block = "10.0.0.0/16"
+# 
+# tags = {
+#   Name = "Project VPC"
+# }
+#}
 
 resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
@@ -25,6 +33,8 @@ resource "aws_instance" "blog" {
 
   tags = {
     Name = var.instance_type
+    name        = var.name
+    environment = var.environment
   }
 }
 
@@ -33,7 +43,7 @@ resource "aws_security_group" "blog" {
   tags = {
     Terraform = "true"
   }
-  vpc_id = "${var.vpc_id}"
+  vpc_id = "${var.aws_vpc_cidr_block}"
 }
 
 resource "aws_security_group_rule" "blog_http_in" {
@@ -64,3 +74,34 @@ resource "aws_security_group_rule" "blog_everything_out" {
   cidr_blocks = ["0.0.0.0/0"]
   security_group_id = aws_security_group.blog.id
 }
+
+
+provider "aws" {
+  region = "us-east-2"
+}
+
+resource "aws_db_parameter_group" "default" {
+  name   = "mariadb"
+  family = "mariadb10.6"
+}
+
+resource "aws_db_instance" "Testing_mariadb" {
+  identifier           = "mariadbdatabase"
+  allocated_storage    = 10
+  db_name              = "mydb"
+  engine               = "mariadb"
+  engine_version       = "10.6.10"
+  instance_class       = "db.m6g.large"
+  parameter_group_name = "mariadb"
+  skip_final_snapshot  = true
+  username             = var.username
+  password             = var.password
+  availability_zone    = "us-east-2a"
+  publicly_accessible  = true
+  deletion_protection  = false
+
+  tags = {
+    name = "TEST MariaDB"
+  }
+}
+
