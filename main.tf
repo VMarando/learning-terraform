@@ -63,11 +63,31 @@ module "blog_alb" {
       cidr_ipv4   = "10.0.0.0/16"
     }
   }
-}
-  tags = {
-    Environment = "dev"
+
+  listeners = {
+    ex-http-https-redirect = {
+      port     = 80
+      protocol = "HTTP"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
   }
 
+  target_groups = {
+    ex-instance = {
+      name_prefix      = "blog"
+      protocol         = "HTTP"
+      port             = 80
+      target_type      = "instance"
+  }
+  tags = {
+    Environment = "dev"
+    }
+  }
+}
 
 module "autoscaling" {
   source  = "terraform-aws-modules/autoscaling/aws"
