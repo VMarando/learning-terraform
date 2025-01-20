@@ -30,8 +30,3 @@ variable "environment" {
   type    = string
   default = "dev"
 }
-
-locals {
-  service_tag   = "${var.service_name}-${var.environment}"
-  session_token = "${var.service_name}:${var.service_token}"
-}
