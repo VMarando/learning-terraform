@@ -113,21 +113,6 @@ resource "aws_eip" "ditwl-eip-ngw-zb" {
   }  
 }
 
-# Routing table for public subnet (access to the Internet)
-# Using in-line routes 
-resource "aws_route_table" "ditwl-rt-pub-main" {
-  vpc_id = aws_vpc.ditlw-vpc.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.ditwl-ig.id
-  }
-
-  tags = {
-    Name = "ditwl-rt-pub-main"
-  }
-}
-
 # Set new main_route_table as main
 resource "aws_main_route_table_association" "ditwl-rta-default" {
   vpc_id         = aws_vpc.ditlw-vpc.id
