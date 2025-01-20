@@ -82,11 +82,11 @@ module "blog_alb" {
       protocol         = "HTTP"
       port             = 80
       target_type      = "instance"
+    }
   }
   tags = {
     Environment = "dev"
     }
-  }
 }
 
 module "autoscaling" {
