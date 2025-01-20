@@ -75,11 +75,6 @@ resource "aws_security_group_rule" "blog_everything_out" {
   security_group_id = aws_security_group.blog.id
 }
 
-
-provider "aws" {
-  region = "us-east-2"
-}
-
 resource "aws_db_parameter_group" "default" {
   name   = "mariadb"
   family = "mariadb10.6"
