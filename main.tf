@@ -80,7 +80,7 @@ resource "aws_security_group" "blog" {
   tags = {
     Terraform = "true"
   }
-  vpc_id = "${var.aws_vpc_cidr_block}"
+  vpc_id = aws_subnet.ditwl-sn-za-pro-pub-00
 }
 
 resource "aws_security_group_rule" "blog_http_in" {
