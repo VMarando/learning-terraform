@@ -15,7 +15,7 @@ data "aws_ami" "app_ami" {
 }
 resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
-  instance_type = var.instance_type
+  instance_type = "t3.nano"
 
   tags = {
     Name = "Learning Terraform"
