@@ -7,54 +7,49 @@ variable "vpc_id" {
 #------------------------
 # VPC
 #------------------------
-#aws_vpc_tag_name = "ditwl-vpc"
-#aws_vpc_block = "172.17.32.0/19" #172.17.32.1 - 172.16.67.254
-
-variable "aws_vpc_cidr_block" {
-  description = "AWS CIDR block for VPC"
-  type        = string
-  default     = "10.0.0.0/16"
+# Av. Zone: A, Env: PRO, Type: PUBLIC, Code: 00, CIDR Block: 172.21.0.0/23
+variable "aws_subnet" "ditwl-sn-za-pro-pub-00" {
+  vpc_id                  = aws_vpc.ditlw-vpc.id
+  cidr_block              = "172.21.0.0/23" #172.21.0.0 - 172.21.1.255
+  map_public_ip_on_launch = true
+  availability_zone       = "us-west-1a"
+  tags = {
+    Name = "ditwl-sn-za-pro-pub-00"
+  }
 }
 
-#------------------------
-# SUBNETS
-#------------------------
+# Av. Zone: A, Env: PRO, Type: PRIVATE, Code: 02, CIDR Block: 172.21.2.0/23
+variable "aws_subnet" "ditwl-sn-za-pro-pri-02" {
+  vpc_id                  = aws_vpc.ditlw-vpc.id
+  cidr_block              = "172.21.2.0/23" #172.21.2.0 - 172.21.3.255
+  map_public_ip_on_launch = false
+  availability_zone       = "us-west-1a"
+  tags = {
+    Name = "ditwl-sn-za-pro-pri-02"
+  }
+}
 
-  #------------------------
-  # For EC2 instances
-  #------------------------
+# Av. Zone: B, Env: PRO, Type: PUBLIC, Code: 04, CIDR Block: 172.21.4.0/23
+variable "aws_subnet" "ditwl-sn-zb-pro-pub-04" {
+  vpc_id                  = aws_vpc.ditlw-vpc.id
+  cidr_block              = "172.21.4.0/23" #172.21.4.0 - 172.21.5.255
+  map_public_ip_on_launch = true
+  availability_zone       = "us-west-1b"
+  tags = {
+    Name = "ditwl-sn-zb-pro-pub-04"
+  }
+}
 
-    #Zone: A, Env: PRO, Type: PUBLIC, Code: 32
-    aws_sn_za_pro_pub_00={
-      cidr   ="10.0.0.0/24" #172.17.32.1 - 172.17.33.254
-      name   ="ditwl-sn-za-pro-pub-00"
-      az     ="us-west-1a"
-      public = "true"
-    }
-
-    #Zone: A, Env: PRO, Type: PRIVATE, Code: 34
-    aws_sn_za_pro_pri_08={
-      cidr   = "10.0.8.0/24" #172.17.34.1 - 172.17.35.254
-      name   = "ditwl-sn-za-pro-pri-08"
-      az     = "us-west-1a"
-      public = "false"
-    }
-
-    #Zone: B, Env: PRO, Type: PUBLIC, Code: 36
-    aws_sn_zb_pro_pub_16={
-      cidr   = "10.0.16.0/24" #172.17.36.1 - 172.17.37.254
-      name   = "ditwl-sn-zb-pro-pub-16"
-      az     = "us-west-1b"
-      public = "false"
-    }
-
-    #Zone: B, Env: PRO, Type: PRIVATE, Code: 38
-    aws_sn_zb_pro_pri_24={
-      cidr   = "10.0.24.0/24" #172.17.38.1 - 172.17.39.254
-      name   = "ditwl-sn-zb-pro-pri-24"
-      az     = "us-west-1b"
-      public = "false"
-    }
+# Av. Zone: B, Env: PRO, Type: PRIVATE, Code: 06, CIDR Block: 172.21.6.0/23
+variable "aws_subnet" "ditwl-sn-zb-pro-pri-06" {
+  vpc_id                  = aws_vpc.ditlw-vpc.id
+  cidr_block              = "172.21.6.0/23" #172.21.6.0 - 172.21.7.255    
+  map_public_ip_on_launch = false
+  availability_zone       = "us-west-1b"
+  tags = {
+    Name = "ditwl-sn-zb-pro-pri-06"
+  }
+}
 
 variable "aws_region" {
   description = "AWS region"
