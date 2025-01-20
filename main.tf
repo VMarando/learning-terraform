@@ -33,7 +33,7 @@ resource "aws_security_group" "blog" {
   tags = {
     Terraform = "true"
   }
-  cidr = var.vpc_cidr_block
+  vpc_id = var.vpc_cidr_block
 }
 
 resource "aws_security_group_rule" "blog_http_in" {
