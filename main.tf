@@ -241,3 +241,41 @@ resource "aws_security_group_rule" "ditwl-sr-front-end-to-api" {
   source_security_group_id = aws_security_group.ditwl-sg-front-end.id
   description              = "Allow access from the front-end to port 8080 in the back-end API"
 }
+
+# Front-end server running Ubuntu 23.04 ARM Minimal.
+resource "aws_instance" "ditwl-ec-front-end-001" {
+  ami                    = data.aws_ami.ubuntu-23-04-arm64-minimal.id
+  instance_type          = "t4g.micro"
+  subnet_id              = aws_subnet.ditwl-sn-za-pro-pub-00.id
+  key_name               = "ditwl-kp-config-user"
+  vpc_security_group_ids = [aws_security_group.ditwl-sg-base-ec2.id, aws_security_group.ditwl-sg-front-end.id]
+  tags = {
+    "Name"         = "ditwl-ec-front-end-001"
+    "private_name" = "ditwl-ec-front-end-001"
+    "public_name"  = "www"
+    "app"          = "front-end"
+    "app_ver"      = "2.3"
+    "os"           = "ubuntu"
+    "os_ver"       = "23.04"
+    "os_arch"      = "arm64"
+  }
+}
+
+# Back-end server running Ubuntu 23.04 ARM Minimal.
+resource "aws_instance" "ditwl-ec-back-end-123" {
+  ami                    = data.aws_ami.ubuntu-23-04-arm64-minimal.id
+  instance_type          = "t4g.small"
+  subnet_id              = aws_subnet.ditwl-sn-za-pro-pri-02.id
+  key_name               = "ditwl-kp-config-user"
+  vpc_security_group_ids = [aws_security_group.ditwl-sg-base-ec2.id, aws_security_group.ditwl-sg-back-end.id]
+  tags = {
+    "Name"         = "ditwl-ec-back-end-123"
+    "private_name" = "ditwl-ec-back-end-123"
+    "public_name"  = "server"
+    "app"          = "back-end"
+    "app_ver"      = "1.2"
+    "os"           = "ubuntu"
+    "os_ver"       = "23.04"
+    "os_arch"      = "arm64"
+  }
+}
