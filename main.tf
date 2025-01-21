@@ -5,10 +5,6 @@ resource "aws_vpc" "ditlw-vpc" {
   }
 }
 
-resource "aws_internet_gateway" "ditwl-ig" {
-  vpc_id = aws_vpc.ditlw-vpc.id
-}
-
 # Av. Zone: A, Env: PRO, Type: PUBLIC, Code: 00, CIDR Block: 172.21.0.0/23
 resource "aws_subnet" "ditwl-sn-za-pro-pub-00" {
   vpc_id                  = aws_vpc.ditlw-vpc.id
