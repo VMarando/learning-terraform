@@ -264,7 +264,6 @@ resource "aws_instance" "ditwl-ec-front-end-001" {
   ami                    = data.aws_ami.ubuntu-23-04-arm64-minimal.id
   instance_type          = "t4g.micro"
   subnet_id              = aws_subnet.ditwl-sn-za-pro-pub-00.id
-  key_name               = "ditwl-kp-config-user"
   vpc_security_group_ids = [aws_security_group.ditwl-sg-base-ec2.id, aws_security_group.ditwl-sg-front-end.id]
   tags = {
     "Name"         = "ditwl-ec-front-end-001"
@@ -283,7 +282,6 @@ resource "aws_instance" "ditwl-ec-back-end-123" {
   ami                    = data.aws_ami.ubuntu-23-04-arm64-minimal.id
   instance_type          = "t4g.small"
   subnet_id              = aws_subnet.ditwl-sn-za-pro-pri-02.id
-  key_name               = "ditwl-kp-config-user"
   vpc_security_group_ids = [aws_security_group.ditwl-sg-base-ec2.id, aws_security_group.ditwl-sg-back-end.id]
   tags = {
     "Name"         = "ditwl-ec-back-end-123"
