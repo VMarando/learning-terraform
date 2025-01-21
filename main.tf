@@ -98,3 +98,69 @@ resource "aws_eip" "ditwl-eip-ngw-zb" {
     Name = "ditwl-eip-ngw-zb"
   }  
 }
+
+# Routing table for public subnet (access to the Internet)
+# Using in-line routes 
+resource "aws_route_table" "ditwl-rt-pub-main" {
+  vpc_id = aws_vpc.ditlw-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.ditwl-ig.id
+  }
+
+  tags = {
+    Name = "ditwl-rt-pub-main"
+  }
+}
+
+# Set new main_route_table as main
+resource "aws_main_route_table_association" "ditwl-rta-default" {
+  vpc_id         = aws_vpc.ditlw-vpc.id
+  route_table_id = aws_route_table.ditwl-rt-pub-main.id
+}
+
+# Routing table for private subnet in Availability Zone A 
+# Using standalone routes resources 
+resource "aws_route_table" "ditwl-rt-priv-za" {
+  vpc_id = aws_vpc.ditlw-vpc.id
+  tags = {
+    Name = "ditwl-rt-priv-za"
+  }
+}
+
+# Route Access to the Internet through NAT  (Av. Zone A)
+resource "aws_route" "ditwl-r-rt-priv-za-ngw-za" {
+  route_table_id         = aws_route_table.ditwl-rt-priv-za.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_nat_gateway.ditwl-ngw-za-pub.id
+}
+
+# Routing Table Association for Subnet ditwl-sn-za-pro-pri-02
+resource "aws_route_table_association" "ditwl-rta-za-pro-pri-02" {
+  subnet_id      = aws_subnet.ditwl-sn-za-pro-pri-02.id
+  route_table_id = aws_route_table.ditwl-rt-priv-za.id
+}
+
+# Routing table for private subnet in Availability Zone B
+# Using standalone routes resources 
+resource "aws_route_table" "ditwl-rt-priv-zb" {
+  vpc_id = aws_vpc.ditlw-vpc.id
+
+  tags = {
+    Name = "ditwl-rt-priv-zb"
+  }
+}
+
+# Routing Table Association for Subnet ditwl-sn-zb-pro-pri-06
+resource "aws_route_table_association" "ditwl-rta-zb-pro-pri-06" {
+  subnet_id      = aws_subnet.ditwl-sn-zb-pro-pri-06.id
+  route_table_id = aws_route_table.ditwl-rt-priv-zb.id
+}
+
+# Route Access to the Internet through NAT (Av. Zone B)
+resource "aws_route" "ditwl-r-rt-priv-zb-ngw-zb" {
+  route_table_id         = aws_route_table.ditwl-rt-priv-zb.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_nat_gateway.ditwl-ngw-zb-pub.id
+}
