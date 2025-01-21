@@ -56,3 +56,45 @@ resource "aws_internet_gateway" "ditwl-ig" {
     Name = "ditwl-igNew"
   }
 }
+
+# NAT Gateway Public Availability Zone: A
+resource "aws_nat_gateway" "ditwl-ngw-za-pub" {
+  subnet_id = aws_subnet.ditwl-sn-za-pro-pub-00.id
+  allocation_id = aws_eip.ditwl-eip-ngw-za.id
+
+  tags = {
+    Name = "ditwl-ngw-za-pub"
+  }
+
+  depends_on = [aws_internet_gateway.ditwl-ig]
+}
+
+# EIP for NAT Gateway in AZ A
+resource "aws_eip" "ditwl-eip-ngw-za" {
+  domain   = "vpc"
+
+  tags = {
+    Name = "ditwl-eip-ngw-za"
+  }
+}
+
+# NAT Gateway Public Availability Zone: B
+resource "aws_nat_gateway" "ditwl-ngw-zb-pub" {
+  subnet_id = aws_subnet.ditwl-sn-zb-pro-pub-04.id
+  allocation_id = aws_eip.ditwl-eip-ngw-zb.id
+
+  tags = {
+    Name = "ditwl-ngw-zb-pub"
+  }
+
+  depends_on = [aws_internet_gateway.ditwl-ig]
+}
+
+# EIP for NAT Gateway in AZ B
+resource "aws_eip" "ditwl-eip-ngw-zb" {
+  domain   = "vpc"
+
+  tags = {
+    Name = "ditwl-eip-ngw-zb"
+  }  
+}
