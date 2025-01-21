@@ -164,3 +164,80 @@ resource "aws_route" "ditwl-r-rt-priv-zb-ngw-zb" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_nat_gateway.ditwl-ngw-zb-pub.id
 }
+
+# Create a "base" Security Group for EC2 instances
+resource "aws_security_group" "ditwl-sg-base-ec2" {
+  name        = "ditwl-sg-base-ec2"
+  vpc_id      = aws_vpc.ditlw-vpc.id
+  description = "Base security Group for EC2 instances"
+}
+
+# DANGEROUS!!
+# Allow access from the Internet to port 22 (SSH) in the Public EC2 instances
+resource "aws_security_group_rule" "ditwl-sr-internet-to-ec2-ssh" {
+  security_group_id = aws_security_group.ditwl-sg-base-ec2.id
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"] # Internet
+  description       = "Allow access from the Internet to port 22 (SSH)"
+}
+
+# Allow access from the Internet for ICMP protocol (e.g. ping) to the EC2 instances
+resource "aws_security_group_rule" "ditwl-sr-internet-to-ec2-icmp" {
+  security_group_id = aws_security_group.ditwl-sg-base-ec2.id
+  type              = "ingress"
+  from_port         = -1
+  to_port           = -1
+  protocol          = "icmp"
+  cidr_blocks       = ["0.0.0.0/0"] # Internet
+  description       = "Allow access from the Internet for ICMP protocol"
+}
+
+# Allow all outbound traffic to the Internet
+resource "aws_security_group_rule" "ditwl-sr-all-outbund" {
+  security_group_id = aws_security_group.ditwl-sg-base-ec2.id
+  type              = "egress"
+  from_port         = "0"
+  to_port           = "0"
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = "Allow all outbound traffic to Internet"
+}
+
+# Create a Security Group for the Front end Server
+resource "aws_security_group" "ditwl-sg-front-end" {
+  name        = "ditwl-sg-front-end"
+  vpc_id      = aws_vpc.ditlw-vpc.id
+  description = "Front end Server Security"
+}
+
+# Allow access from the Internet to port 80 HTTP in the EC2 instances
+resource "aws_security_group_rule" "ditwl-sr-internet-to-front-end-http" {
+  security_group_id = aws_security_group.ditwl-sg-front-end.id
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"] # Internet
+  description       = "Access from the Internet to port 80 in the EC2 instances"
+}
+
+# Create a Security Group for the Back-end Server
+resource "aws_security_group" "ditwl-sg-back-end" {
+  name        = "ditwl-sg-back-end"
+  vpc_id      = aws_vpc.ditlw-vpc.id
+  description = "Back-end Server Security"
+}
+
+# Allow access from the front-end to port 8080 in the back-end API
+resource "aws_security_group_rule" "ditwl-sr-front-end-to-api" {
+  security_group_id        = aws_security_group.ditwl-sg-back-end.id
+  type                     = "ingress"
+  from_port                = 8080
+  to_port                  = 8080
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.ditwl-sg-front-end.id
+  description              = "Allow access from the front-end to port 8080 in the back-end API"
+}
