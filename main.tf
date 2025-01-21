@@ -242,6 +242,23 @@ resource "aws_security_group_rule" "ditwl-sr-front-end-to-api" {
   description              = "Allow access from the front-end to port 8080 in the back-end API"
 }
 
+#Find AMI Ubuntu 23.04 ARM64 Minimal
+data "aws_ami" "ubuntu-23-04-arm64-minimal" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu-minimal/images/hvm-ssd/ubuntu-lunar-23.04-arm64-minimal-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
 # Front-end server running Ubuntu 23.04 ARM Minimal.
 resource "aws_instance" "ditwl-ec-front-end-001" {
   ami                    = data.aws_ami.ubuntu-23-04-arm64-minimal.id
