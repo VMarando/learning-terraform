@@ -53,6 +53,6 @@ resource "aws_subnet" "ditwl-sn-zb-pro-pri-06" {
 resource "aws_internet_gateway" "ditwl-ig" {
   vpc_id = aws_vpc.ditlw-vpc.id
   tags = {
-    Name = "ditwl-ig"
+    Name = "ditwl-igNew"
   }
 }
