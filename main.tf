@@ -87,6 +87,6 @@ module "blog_sg" {
   name                = "${var.environment.name}-blog"
   ingress_rules       = ["https-443-tcp","http-80-tcp"]
   ingress_cidr_blocks = ["${var.environment.network_prefix}.0.0/0"]
-  egress_rules.       = ["all-all"]
+  egress_rules        = ["all-all"]
   egress_cidr_blocks  = ["${var.environment.network_prefix}.0.0/0"]
 }
