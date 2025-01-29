@@ -18,10 +18,10 @@ module "blog_vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
   name = var.environment.name
-  cidr = "${var.environment.network_prefix}${var.environment.name_prefix}/16"
+  cidr = "${var.environment.network_prefix}${var.environment.network_prefix}/16"
 
   azs             = ["us-west-2a","us-west-2b","us-west-2c"]
-  public_subnets  = ["${var.environment.name_prefix}.101.0/24", "${var.environment.name_prefix}.102.0/24", "${var.environment.name_prefix}.103.0/24"]
+  public_subnets  = ["${var.environment.network_prefix}.101.0/24", "${var.environment.network_prefix}.102.0/24", "${var.environment.network_prefix}.103.0/24"]
 
   tags = {
     Terraform = "true"
