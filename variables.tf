@@ -12,8 +12,8 @@ variable "ami_filter"{
   })
   
   default = {
-    values = var.ami_filter.name
-    owners = var.ami_filter.owner # Bitnami
+    value = var.ami_filter.name
+    owner = var.ami_filter.owner # Bitnami
   }
 }
 
